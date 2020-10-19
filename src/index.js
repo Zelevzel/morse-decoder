@@ -38,61 +38,35 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
 
-    let str = 'hello wor';
-    let result = '';
-    let strArray = expr.split('');
-    let i = 0;
+    let strArray = expr.split(''),
+        wordsArray = [],
+        strLetter = '',
+        strDecode = '',
+        j = 0;
 
 
-
-    strArray.forEach(item => {
-        if (item === ' ') {
-            strArray[i] = '**********';
-            i++;
+    for (let i = 0; i < strArray.length; i++) {
+        strLetter += strArray[i];
+        if ((i + 1) % 10 === 0) {
+            wordsArray[j] = strLetter;
+            strLetter = '';
+            j += 1;
         }
-        for (let key in MORSE_TABLE) {
-            if (item === MORSE_TABLE[key]) {
-                strArray[i] = key;
-                i++;
-            }
-        }
-    });
+    }
 
-    let strResult = ''
+    for (let i = 0; i < wordsArray.length; i++) {
+        wordsArray[i] = wordsArray[i].replace(/10/g, '.').replace(/11/g, '-').replace(/0/g, '');
+        if (wordsArray[i].includes('*'))
+            strDecode += ' ';
+        else
+            strDecode += MORSE_TABLE[wordsArray[i]];
+    }
 
-    i = 0;
-    strArray.forEach(str => {
-
-
-        let resArr = str.split('')
-        i = 0;
-        resArr.forEach(char => {
-            if (char == '.') resArr[i] = '10';
-            if (char == '-') resArr[i] = '11';
-            i++;
-
-            if (resArr.length === i) {
-                while (i < 5) {
-                    resArr.unshift('00')
-                    i++
-                }
-            }
-        });
-
-        strResult += resArr.join('')
-
-
-
-    })
-    console.log(strResult);
-    return strResult
+    return strDecode;
 }
 
 module.exports = {
     decode
 }
 
-
-decode('hello world')
